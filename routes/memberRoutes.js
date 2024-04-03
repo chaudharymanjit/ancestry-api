@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const Member = require('../models/Member');
 
-// GET all members
+// GET members
 router.get('/', async (req, res) => {
   try {
-    const members = await Member.find().populate('rootId');
+    // Fetch members associated with the provided rootId (user ID)
+    const members = await Member.find({ rootId: req.query.rootId }).populate('rootId');
     res.json(members);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -15,9 +16,9 @@ router.get('/', async (req, res) => {
 // POST create a new member
 router.post('/', async (req, res) => {
   console.log(req.body)
-  if (!req.body.rootId || !req.body.Address) {
-    console.log(req.body.rootId, req.body.Address)
-    return res.status(400).json({ message: "rootId and address are required fields" });
+  if (!req.body.rootId ) {
+    console.log(req.body.rootId)
+    return res.status(400).json({ message: "rootId " });
   }
   const member = new Member(req.body);
   try {
