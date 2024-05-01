@@ -37,10 +37,14 @@ router.get('/:id', getMember, (req, res) => {
 
 // PUT update a member by id
 router.put('/:id', getMember, async (req, res) => {
-  if (req.body.name != null) {
-    res.member.name = req.body.name;
-  }
-  // ... update other fields as needed
+  // Update each field in the member object if it's provided in the request body
+  const fieldsToUpdate = ['name', 'Address', 'birthCity', 'dob', 'email', 'phone', 'relationship', 'surname'];
+  fieldsToUpdate.forEach(field => {
+    if (req.body[field] != null) {
+      res.member[field] = req.body[field];
+    }
+  });
+
   try {
     const updatedMember = await res.member.save();
     res.json(updatedMember);
@@ -48,6 +52,7 @@ router.put('/:id', getMember, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 
 // DELETE a member
 router.delete('/:id', getMember, async (req, res) => {
