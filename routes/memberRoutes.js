@@ -74,4 +74,4 @@ async function getMember(req, res, next) {
   next();
 }
 
-// module.exports = router;
+module.exports = router;
